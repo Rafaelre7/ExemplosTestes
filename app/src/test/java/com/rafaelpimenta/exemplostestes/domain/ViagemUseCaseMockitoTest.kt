@@ -2,9 +2,11 @@ package com.rafaelpimenta.exemplostestes.domain
 
 import com.google.common.truth.Truth.assertThat
 import com.rafaelpimenta.exemplostestes.data.repository.ViagemRepositoryImpl
+import com.rafaelpimenta.exemplostestes.rules.RegraCustomizada
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyDouble
@@ -21,8 +23,13 @@ class ViagemUseCaseMockitoTest {
     @Mock
     private lateinit var mockViagemRepositoryImpl: ViagemRepositoryImpl
 
+    //falando que é para usar a regra
+    @get:Rule
+    val regra = RegraCustomizada()
+
     @Before
     fun setUp() {
+        println("setUp")
         MockitoAnnotations.openMocks(this)
         viagemUseCase = ViagemUseCase(mockViagemRepositoryImpl)
     }
@@ -30,7 +37,8 @@ class ViagemUseCaseMockitoTest {
     //verifica se a lista de locais nao esta vazia usando apenas use case para testes com fake
     @Test
     fun listarLocais() = runTest {
-
+        println("Metodo listarLocais")
+        regra.log = "100"
         Mockito.`when`(mockViagemRepositoryImpl.listarLocais()).thenReturn(
             listOf(
                 Pair("12025454", "1251210454"),
@@ -47,6 +55,8 @@ class ViagemUseCaseMockitoTest {
 
     @Test
     fun calcularPrecoViagem() = runTest {
+        println("Metodo calcularPrecoViagem")
+        regra.log = "200"
         val distancia = 10.0
         val precoKM = 5.0
         val retornoEsperado = 50.0
@@ -68,5 +78,6 @@ class ViagemUseCaseMockitoTest {
 
     @After
     fun tearDown() {
+        println("tearDown")
     }
 }
